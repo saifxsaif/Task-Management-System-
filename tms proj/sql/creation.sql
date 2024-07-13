@@ -1,0 +1,66 @@
+CREATE DATABASE IF NOT EXISTS database;
+USE database;
+
+-- Create table for employee task management system.
+-- ADMIN_MANAGER Table
+CREATE TABLE ADMIN_MANAGER (
+    admin_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    admin_name VARCHAR(50) UNIQUE NOT NULL,
+    admin_email VARCHAR(30) UNIQUE NOT NULL,
+    admin_phone VARCHAR(10) NOT NULL,
+    admin_gender VARCHAR(10) NOT NULL,
+    admin_pass VARCHAR(255) NOT NULL
+);
+
+-- DEPARTMENT Table
+CREATE TABLE DEPARTMENT (
+    dept_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    dept_name VARCHAR(50) UNIQUE NOT NULL,
+    admin_id INT,
+    FOREIGN KEY (admin_id) REFERENCES ADMIN_MANAGER(admin_id) ON DELETE SET NULL
+);
+
+-- EMPLOYEE Table
+CREATE TABLE EMPLOYEE (
+    emp_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    emp_name VARCHAR(30),
+    emp_email VARCHAR(50) UNIQUE NOT NULL,
+    emp_phone VARCHAR(10)  NOT NULL,
+    emp_gender VARCHAR(10) NOT NULL,
+    emp_pass VARCHAR(255) NOT NULL,
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES DEPARTMENT(dept_id) ON DELETE SET NULL
+);
+
+-- TASK Table
+CREATE TABLE TASK (
+    task_id VARCHAR(20) NOT NULL PRIMARY KEY ,
+    task_title VARCHAR(200) NOT NULL,
+    task_desc VARCHAR(255),
+    task_priority VARCHAR(30) NOT NULL,
+    startDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    endDate TIMESTAMP NOT NULL
+);
+
+-- TASK_STATUS Table
+CREATE TABLE TASK_STATUS (
+    task_id  VARCHAR(20) NOT NULL PRIMARY KEY ,
+    task_status VARCHAR(20) DEFAULT 'Not Started',
+    task_percentage INT DEFAULT 0,
+    updated_info VARCHAR(255) DEFAULT ' ',
+    updated_date TIMESTAMP DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    emp_id INT,
+    FOREIGN KEY (emp_id) REFERENCES EMPLOYEE(emp_id) ON DELETE SET NULL,
+    FOREIGN KEY (task_id) REFERENCES TASK(task_id) ON DELETE CASCADE
+);
+
+-- EMPLOYEE_Archive Table
+CREATE TABLE EMPLOYEE_Archive (
+    emp_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    emp_name VARCHAR(30),
+    emp_email VARCHAR(50) UNIQUE NOT NULL,
+    emp_phone VARCHAR(10)  NOT NULL,
+    emp_gender VARCHAR(10) NOT NULL,
+    emp_pass VARCHAR(255) NOT NULL,
+    dept_id INT
+);
